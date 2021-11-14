@@ -16,7 +16,24 @@ app.get("/", (request, response) => {
 });
 
 app.post("/", async (request, response) => {
-  const { gay, username, duration } = request.body;
+  const {
+    formtype,
+    touristContact,
+    expertise,
+    preference1,
+    preference2,
+    preference3,
+    ageAndCity,
+    problem1,
+    problem2,
+    problem3,
+    problem4,
+    problem5,
+    problem6,
+    problem7,
+    featureRating,
+    featureThoughts,
+  } = request.body;
   const auth = new google.auth.GoogleAuth({
     keyFile: "keys.json", //the key file
     //url to spreadsheets API
@@ -45,17 +62,35 @@ app.post("/", async (request, response) => {
   const readData = await googleSheetsInstance.spreadsheets.values.get({
     auth, //auth object
     spreadsheetId, // spreadsheet id
-    range: "Responses!A:A", //range of cells to read from.
+    range: `${formtype}!A:A`, //range of cells to read from.
   });
 
   //write data into the google sheets
   await googleSheetsInstance.spreadsheets.values.append({
     auth, //auth object
     spreadsheetId, //spreadsheet id
-    range: "Responses!A:C", //sheet name and range of cells
+    range: `${formtype}!A:C`, //sheet name and range of cells
     valueInputOption: "USER_ENTERED", // The information will be passed according to what the usere passes in as date, number or text
     resource: {
-      values: [[gay, username, duration]],
+      values: [
+        [
+          touristContact,
+          expertise,
+          preference1,
+          preference2,
+          preference3,
+          ageAndCity,
+          problem1,
+          problem2,
+          problem3,
+          problem4,
+          problem5,
+          problem6,
+          problem7,
+          featureRating,
+          featureThoughts,
+        ],
+      ],
     },
   });
 
